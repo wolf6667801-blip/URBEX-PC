@@ -1,6 +1,6 @@
 package com.urbexpc
 
-import android.app.Activity
+import androidx.activity.ComponentActivity
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
@@ -14,7 +14,7 @@ import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 
-class MainActivity : Activity() {
+class MainActivity : ComponentActivity() {
     private val prefs by lazy { getSharedPreferences("urbex_pc", MODE_PRIVATE) }
     private lateinit var isoStatus: TextView
     private lateinit var engineStatus: TextView
