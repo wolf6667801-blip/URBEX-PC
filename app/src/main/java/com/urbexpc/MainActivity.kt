@@ -77,7 +77,7 @@ class MainActivity : ComponentActivity() {
         ))
 
         body.addView(section("INSTALLATION MEDIA"))
-        isoStatus = label("No Windows ISO selected", 14, Color.rgb(35, 45, 60), false)
+        isoStatus = label("No boot ISO selected", 14, Color.rgb(35, 45, 60), false)
         body.addView(isoStatus)
         body.addView(actionButton("Choose boot ISO (FreeDOS or Windows)") {
             chooseIso.launch(arrayOf("application/octet-stream", "application/x-iso9660-image", "*/*"))
@@ -108,7 +108,7 @@ class MainActivity : ComponentActivity() {
         body.addView(engineStatus)
         body.addView(infoCard(
             "Persistent storage planned",
-            "The VM will use a QCOW2 virtual disk. Windows settings, installed apps and files will remain after a clean shutdown. The disk engine and backup controls are still under development."
+            "The app can now create an 8 GB RAW disk image. The next storage milestone is qemu-img/QCOW2 integration, followed by attaching the disk to QEMU and implementing safe guest shutdown."
         ))
 
         body.addView(section("IMPORTANT"))
