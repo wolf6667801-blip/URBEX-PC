@@ -1,0 +1,19 @@
+# Visual Studio
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.log
+
+# Build outputs
+Debug/
+Release/
+x64/
+x86/
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
