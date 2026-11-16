@@ -1,22 +1,26 @@
 # URBEX PC roadmap
 
-## Milestone 1 — Desktop shell
-- [x] Create repository and initial Windows Forms prototype
-- [x] Add desktop navigation
-- [x] Add basic file browser
-- [x] Add built-in demo console
-- [ ] Test build on Windows 7 SP1
-- [ ] Improve scaling and visual polish
+## Direction: Android app + real Windows 10 x64 guest
 
-## Milestone 2 — Desktop experience
-- [ ] Window-like panels and app switching
-- [ ] Settings screen
-- [ ] Persistent user preferences
-- [ ] Safer file operations with confirmation dialogs
+- [x] Create repository and initial desktop-shell mock-up
+- [x] Choose Windows 10 x64 as the intended guest OS
+- [x] Define persistent virtual-disk requirement
+- [ ] Build an Android ARM64 app shell
+- [ ] Integrate/build a maintained QEMU Android engine
+- [ ] Create and configure a persistent QCOW2 disk
+- [ ] Let the user select a Windows 10 ISO and provide their own license
+- [ ] Boot-test Windows 10 x64 on real target hardware
+- [ ] Add clean shutdown, pause/resume, and VM status
+- [ ] Add backup/export and snapshot support
+- [ ] Add optional XP-inspired desktop customization instructions
+- [ ] Measure RAM, CPU load, heat, and boot time on low-memory devices
 
-## Milestone 3 — Platform research
-- [ ] Evaluate Android client architecture
-- [ ] Research virtualization and compatibility engines
-- [ ] Document hardware and licensing requirements
+## Non-negotiable engineering constraints
 
-A visual shell is not a substitute for a virtual machine. Real guest operating systems and application compatibility require dedicated engines and additional engineering.
+- A visual Windows-like shell is not a virtual machine.
+- Android ARM64 running an x86-64 guest will likely need slow software CPU translation.
+- A 4 GB phone may not have enough free memory for a useful Windows 10 x64 session.
+- Never claim Steam or games work until tested individually.
+- Never bundle Windows ISO files or product keys.
+
+The first real milestone is a proof of concept that boots a user-provided Windows 10 x64 ISO and preserves guest changes on a QCOW2 disk. If this cannot run acceptably on the target phone, document that honestly and consider remote desktop to a separate PC as the practical fallback.
