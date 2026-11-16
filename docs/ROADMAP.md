@@ -9,8 +9,9 @@
 - [x] Add GitHub Actions APK build workflow
 - [x] Research Limbo's Android QEMU x86_64-softmmu path
 - [x] Add classic Doom as an early, lightweight VM test target
+- [x] Add initial persistent 8 GB RAW disk creation in app-private storage
 - [ ] Build and integrate the Android ARM64 QEMU native engine
-- [ ] Create persistent QCOW2 disks with qemu-img
+- [ ] Integrate qemu-img and add QCOW2 disk creation/conversion
 - [ ] Implement VM process lifecycle and clean shutdown
 - [ ] Implement guest display, pointer, keyboard, and audio
 - [ ] Boot-test a small DOS guest and classic Doom
@@ -20,7 +21,7 @@
 
 ## Engineering constraints
 
-- The current APK front end does not yet contain QEMU and cannot boot any guest.
+- The Android front end can select an ISO and create an 8 GB logical RAW disk file, but it does not yet contain QEMU and cannot boot any guest.
 - An ARM64 phone emulating x86-64 requires CPU translation; expect slow performance.
 - The 4 GB device may not have enough free memory for Windows 10 x64.
 - Doom is a first emulator smoke test, not proof that Windows 10 or Steam will run well.
