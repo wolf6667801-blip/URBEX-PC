@@ -4,23 +4,26 @@
 
 - [x] Create repository and initial desktop-shell mock-up
 - [x] Choose Windows 10 x64 as the intended guest OS
-- [x] Define persistent virtual-disk requirement
-- [ ] Build an Android ARM64 app shell
-- [ ] Integrate/build a maintained QEMU Android engine
-- [ ] Create and configure a persistent QCOW2 disk
-- [ ] Let the user select a Windows 10 ISO and provide their own license
-- [ ] Boot-test Windows 10 x64 on real target hardware
-- [ ] Add clean shutdown, pause/resume, and VM status
+- [x] Define persistent QCOW2 virtual-disk requirement
+- [x] Add Android app front end and ISO document picker
+- [x] Add GitHub Actions APK build workflow
+- [x] Research Limbo's Android QEMU x86_64-softmmu path
+- [x] Add classic Doom as an early, lightweight VM test target
+- [ ] Build and integrate the Android ARM64 QEMU native engine
+- [ ] Create persistent QCOW2 disks with qemu-img
+- [ ] Implement VM process lifecycle and clean shutdown
+- [ ] Implement guest display, pointer, keyboard, and audio
+- [ ] Boot-test a small DOS guest and classic Doom
+- [ ] Boot-test a user-provided Windows 10 x64 ISO
 - [ ] Add backup/export and snapshot support
-- [ ] Add optional XP-inspired desktop customization instructions
-- [ ] Measure RAM, CPU load, heat, and boot time on low-memory devices
+- [ ] Add optional XP-inspired desktop customization guidance
 
-## Non-negotiable engineering constraints
+## Engineering constraints
 
-- A visual Windows-like shell is not a virtual machine.
-- Android ARM64 running an x86-64 guest will likely need slow software CPU translation.
-- A 4 GB phone may not have enough free memory for a useful Windows 10 x64 session.
-- Never claim Steam or games work until tested individually.
-- Never bundle Windows ISO files or product keys.
+- The current APK front end does not yet contain QEMU and cannot boot any guest.
+- An ARM64 phone emulating x86-64 requires CPU translation; expect slow performance.
+- The 4 GB device may not have enough free memory for Windows 10 x64.
+- Doom is a first emulator smoke test, not proof that Windows 10 or Steam will run well.
+- Do not bundle Windows installation media, product keys, or copyrighted Doom game data.
 
-The first real milestone is a proof of concept that boots a user-provided Windows 10 x64 ISO and preserves guest changes on a QCOW2 disk. If this cannot run acceptably on the target phone, document that honestly and consider remote desktop to a separate PC as the practical fallback.
+See [ANDROID_VM_PLAN.md](ANDROID_VM_PLAN.md) and [DOOM_TEST.md](DOOM_TEST.md).
