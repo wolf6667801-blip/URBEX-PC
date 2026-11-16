@@ -18,6 +18,7 @@ class MainActivity : ComponentActivity() {
     private val prefs by lazy { getSharedPreferences("urbex_pc", MODE_PRIVATE) }
     private lateinit var isoStatus: TextView
     private lateinit var engineStatus: TextView
+    private lateinit var diskStatus: TextView
 
     private val chooseIso = registerForActivityResult(
         androidx.activity.result.contract.ActivityResultContracts.OpenDocument()
@@ -43,6 +44,7 @@ class MainActivity : ComponentActivity() {
         buildScreen()
         val saved = prefs.getString("windows_iso_uri", null)?.let(Uri::parse)
         updateIsoStatus(saved)
+        updateDiskStatus()
     }
 
     private fun dp(value: Int): Int = (value * resources.displayMetrics.density).toInt()
@@ -77,9 +79,20 @@ class MainActivity : ComponentActivity() {
         body.addView(section("INSTALLATION MEDIA"))
         isoStatus = label("No Windows ISO selected", 14, Color.rgb(35, 45, 60), false)
         body.addView(isoStatus)
-        body.addView(actionButton("Choose Windows 10 ISO") {
+        body.addView(actionButton("Choose boot ISO (FreeDOS or Windows)") {
             chooseIso.launch(arrayOf("application/octet-stream", "application/x-iso9660-image", "*/*"))
         })
+
+        body.addView(section("PERSISTENT VIRTUAL DISK"))
+        diskStatus = label("No virtual disk created yet", 14, Color.rgb(35, 45, 60), false)
+        body.addView(diskStatus)
+        body.addView(actionButton("Create 8 GB virtual disk") {
+            createVirtualDisk()
+        })
+        body.addView(label(
+            "The first disk is a sparse RAW image stored in the app's private storage. It survives app restarts, but it is not yet connected to a running QEMU machine.",
+            12, Color.rgb(75, 85, 100), false
+        ))
 
         body.addView(section("DEVICE PROFILE"))
         body.addView(infoCard(
@@ -152,6 +165,42 @@ class MainActivity : ComponentActivity() {
             params.topMargin = dp(8)
             layoutParams = params
         }
+
+    private fun createVirtualDisk() {
+        try {
+            val vmDir = java.io.File(filesDir, "vm")
+            if (!vmDir.exists() && !vmDir.mkdirs()) {
+                throw IllegalStateException("Cannot create VM storage folder")
+            }
+            val disk = java.io.File(vmDir, "urbexpc-disk.raw")
+            if (disk.exists() && disk.length() > 0L) {
+                Toast.makeText(this, "Virtual disk already exists", Toast.LENGTH_LONG).show()
+                updateDiskStatus()
+                return
+            }
+            val available = android.os.StatFs(filesDir.absolutePath).availableBytes
+            if (available < 256L * 1024L * 1024L) {
+                throw IllegalStateException("Less than 256 MB free in app storage")
+            }
+            java.io.RandomAccessFile(disk, "rw").use { it.setLength(8L * 1024L * 1024L * 1024L) }
+            prefs.edit().putString("virtual_disk_path", disk.absolutePath).apply()
+            updateDiskStatus()
+            Toast.makeText(this, "8 GB virtual disk created", Toast.LENGTH_LONG).show()
+        } catch (e: Exception) {
+            Toast.makeText(this, "Disk creation failed: ${e.message}", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun updateDiskStatus() {
+        if (!::diskStatus.isInitialized) return
+        val path = prefs.getString("virtual_disk_path", null)
+        val disk = path?.let { java.io.File(it) }
+        diskStatus.text = if (disk != null && disk.exists()) {
+            "Disk ready: ${disk.name} • ${disk.length() / (1024L * 1024L * 1024L)} GB • app storage"
+        } else {
+            "No virtual disk created yet"
+        }
+    }
 
     private fun updateIsoStatus(uri: Uri?) {
         if (!::isoStatus.isInitialized) return
